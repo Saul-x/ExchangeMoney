@@ -11,7 +11,7 @@ public class ExchangeSolution {
     int total;
     HashMap<Currency, Integer> details;
 
-    public ExchangeSolution(int total, HashMap<Currency, Integer> details) {
+    private ExchangeSolution(int total, HashMap<Currency, Integer> details) {
         this.total = total;
         this.details = details;
     }
