@@ -16,7 +16,7 @@ public class ExchangeSolution {
         this.details = details;
     }
 
-    public HashMap<Currency, Integer> getDetails() {
+    public Map<Currency, Integer> getDetails() {
         return details;
     }
 
