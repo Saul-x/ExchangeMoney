@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class ExchangeSolution {
     int total;
@@ -41,16 +42,14 @@ public class ExchangeSolution {
     }
 
     private Currency getOptimizedCurrency(List<ExchangeSolution> exchangeSolutions, int total) {
-        int minCurrenciesCount = Integer.MAX_VALUE;
-        Currency optimizedCurrency = Currency.JPY;
-        for (Currency currency : Currency.values()) {
-            if (total >= currency.value) {
-                if (minCurrenciesCount > exchangeSolutions.get(total - currency.value).currenciesCount()) {
-                    minCurrenciesCount = exchangeSolutions.get(total - currency.value).currenciesCount();
-                    optimizedCurrency = currency;
-                }
-            }
-        }
-        return optimizedCurrency;
+        return Stream.of(Currency.values())
+                .filter(currency -> total >= currency.value)
+                .reduce((prev, next) -> predictCurrenciesCount(exchangeSolutions, total, prev)
+                        > predictCurrenciesCount(exchangeSolutions, total, next) ? next : prev)
+                .orElse(Currency.JPY);
+    }
+
+    private int predictCurrenciesCount(List<ExchangeSolution> exchangeSolutions, int total, Currency currency) {
+        return exchangeSolutions.get(total - currency.value).currenciesCount();
     }
 }
