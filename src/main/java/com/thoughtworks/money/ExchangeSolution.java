@@ -1,5 +1,7 @@
 package com.thoughtworks.money;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,8 +60,11 @@ public class ExchangeSolution {
     private static Currency getOptimizedCurrency(List<ExchangeSolution> exchangeSolutions, int total) {
         return Stream.of(Currency.values())
                 .filter(currency -> total >= currency.value)
-                .reduce((prev, next) -> predictCurrenciesCount(exchangeSolutions, total, prev)
-                        > predictCurrenciesCount(exchangeSolutions, total, next) ? next : prev)
+                .map(currency -> Collections.singletonMap(currency, predictCurrenciesCount(exchangeSolutions, total, currency)))
+                .map(Map::entrySet)
+                .flatMap(Collection::stream)
+                .min(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
                 .orElse(Currency.JPY);
     }
 
