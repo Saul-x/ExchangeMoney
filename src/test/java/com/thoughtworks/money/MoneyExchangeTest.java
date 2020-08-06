@@ -6,7 +6,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class MoneyExchangeTest {
     public HashMap<Integer, String> currenciesDictionary = new LinkedHashMap<>();
@@ -27,6 +27,6 @@ public class MoneyExchangeTest {
         assertEquals(13, detail.get("日元").intValue());
         assertEquals(1, detail.get("港币").intValue());
         assertEquals(1, detail.get("美元").intValue());
-        assertEquals(15, exchangeSolution.currenciesCount);
+        assertEquals(15, exchangeSolution.currenciesCount());
     }
 }
