@@ -41,15 +41,13 @@ public class ExchangeSolution {
     public static ExchangeSolution exchange(int num, Currency unit) {
         final List<ExchangeSolution> exchangeSolutions = IntStream.rangeClosed(0, num * unit.value).mapToObj(amount -> new ExchangeSolution(amount, new HashMap<>()))
                 .collect(Collectors.toList());
-        for (ExchangeSolution exchangeSolution : exchangeSolutions) {
-            if (exchangeSolution.total > 0) {
-                Currency optimizedCurrency = getOptimizedCurrency(exchangeSolutions, exchangeSolution.total);
-                exchangeSolution.updateDetail(
-                        exchangeSolutions.get(getSubExchangeSolutionIndex(optimizedCurrency, exchangeSolution.total)).details,
-                        optimizedCurrency
-                );
-            }
-        }
+        exchangeSolutions.stream().filter(exchangeSolution -> exchangeSolution.total > 0).forEach(exchangeSolution -> {
+            Currency optimizedCurrency = getOptimizedCurrency(exchangeSolutions, exchangeSolution.total);
+            exchangeSolution.updateDetail(
+                    exchangeSolutions.get(getSubExchangeSolutionIndex(optimizedCurrency, exchangeSolution.total)).details,
+                    optimizedCurrency
+            );
+        });
         return exchangeSolutions.get(num * unit.value);
     }
 
