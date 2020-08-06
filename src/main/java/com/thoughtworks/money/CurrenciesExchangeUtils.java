@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 public class CurrenciesExchangeUtils {
     public static String exchangeMoneyWithLeastCurrencies(int num, Currency unit) {
         if (num == 0) return "";
-        ExchangeSolution exchange = new ExchangeSolution(num * unit.value).exchange();
+        ExchangeSolution exchange = ExchangeSolution.exchange(num , unit);
         return num + unit.name + "= " + exchange.detailsDescription();
     }
 

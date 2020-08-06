@@ -8,16 +8,12 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class ExchangeSolution {
-    int total;
-    HashMap<Currency, Integer> details;
+    private int total;
+    private HashMap<Currency, Integer> details;
 
     private ExchangeSolution(int total, HashMap<Currency, Integer> details) {
         this.total = total;
         this.details = details;
-    }
-
-    public ExchangeSolution(int total) {
-        this.total = total;
     }
 
     public HashMap<Currency, Integer> getDetails() {
@@ -28,8 +24,16 @@ public class ExchangeSolution {
         return details.values().stream().reduce(Math::addExact).orElse(0);
     }
 
-    public ExchangeSolution exchange() {
-        final List<ExchangeSolution> exchangeSolutions = IntStream.rangeClosed(0, total).mapToObj(amount -> new ExchangeSolution(amount, new HashMap<>()))
+    public String detailsDescription() {
+       return details.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> entry.getValue() + entry.getKey().name)
+                .collect(Collectors.joining(" + "));
+    }
+
+    public static ExchangeSolution exchange(int num, Currency unit) {
+        final List<ExchangeSolution> exchangeSolutions = IntStream.rangeClosed(0, num * unit.value).mapToObj(amount -> new ExchangeSolution(amount, new HashMap<>()))
                 .collect(Collectors.toList());
         exchangeSolutions.stream()
                 .filter(exchangeSolution -> exchangeSolution.total > 0)
@@ -39,18 +43,10 @@ public class ExchangeSolution {
                     exchangeSolution.getDetails().computeIfPresent(optimizedCurrency, (key, value) -> ++value);
                     exchangeSolution.getDetails().putIfAbsent(optimizedCurrency, 1);
                 });
-        return exchangeSolutions.get(total);
+        return exchangeSolutions.get(num * unit.value);
     }
 
-    public String detailsDescription() {
-       return details.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(entry -> entry.getValue() + entry.getKey().name)
-                .collect(Collectors.joining(" + "));
-    }
-
-    private Currency getOptimizedCurrency(List<ExchangeSolution> exchangeSolutions, int total) {
+    private static Currency getOptimizedCurrency(List<ExchangeSolution> exchangeSolutions, int total) {
         return Stream.of(Currency.values())
                 .filter(currency -> total >= currency.value)
                 .reduce((prev, next) -> predictCurrenciesCount(exchangeSolutions, total, prev)
@@ -58,7 +54,7 @@ public class ExchangeSolution {
                 .orElse(Currency.JPY);
     }
 
-    private int predictCurrenciesCount(List<ExchangeSolution> exchangeSolutions, int total, Currency currency) {
+    private static int predictCurrenciesCount(List<ExchangeSolution> exchangeSolutions, int total, Currency currency) {
         return exchangeSolutions.get(total - currency.value).currenciesCount();
     }
 }

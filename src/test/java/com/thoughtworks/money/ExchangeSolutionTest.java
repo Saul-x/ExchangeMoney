@@ -9,11 +9,11 @@ import static org.junit.Assert.assertEquals;
 public class ExchangeSolutionTest {
     @Test
     public void should_exchange_money_with_least_number_of_currencies() {
-        ExchangeSolution exchangeSolution = new ExchangeSolution(238).exchange();
-        HashMap<Currency, Integer> detail = exchangeSolution.details;
-        assertEquals(13, detail.get(Currency.JPY).intValue());
-        assertEquals(1, detail.get(Currency.HKD).intValue());
+        ExchangeSolution exchangeSolution = ExchangeSolution.exchange(106, Currency.CNY);
+        HashMap<Currency, Integer> detail = exchangeSolution.getDetails();
+        assertEquals(1, detail.get(Currency.CNY).intValue());
+        assertEquals(7, detail.get(Currency.EUR).intValue());
         assertEquals(1, detail.get(Currency.USD).intValue());
-        assertEquals(15, exchangeSolution.currenciesCount());
+        assertEquals(9, exchangeSolution.currenciesCount());
     }
 }
