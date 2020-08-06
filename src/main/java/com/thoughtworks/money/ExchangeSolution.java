@@ -2,6 +2,7 @@ package com.thoughtworks.money;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -39,6 +40,14 @@ public class ExchangeSolution {
                     exchangeSolution.getDetails().putIfAbsent(optimizedCurrency, 1);
                 });
         return exchangeSolutions.get(total);
+    }
+
+    public String detailsDescription() {
+       return details.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> entry.getValue() + entry.getKey().name)
+                .collect(Collectors.joining(" + "));
     }
 
     private Currency getOptimizedCurrency(List<ExchangeSolution> exchangeSolutions, int total) {
