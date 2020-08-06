@@ -33,4 +33,22 @@ public class CurrenciesExchangeUtilsTest {
         String result = CurrenciesExchangeUtils.exchangeMoneyWithLeastCurrencies(678, Currency.EUR);
         Assert.assertEquals("678欧元= 678欧元", result);
     }
+
+    @Test
+    public void should_exchange_0_EUR_with_least_currencies() {
+        String result = CurrenciesExchangeUtils.exchangeMoneyWithLeastCurrencies(0, Currency.EUR);
+        Assert.assertEquals("", result);
+    }
+
+    @Test
+    public void should_exchange_1_EUR_with_most_currencies() {
+        String result = CurrenciesExchangeUtils.exchangeMoneyWithMostCurrencies(678, Currency.EUR);
+        Assert.assertEquals("678欧元= 284760日元", result);
+    }
+
+    @Test
+    public void should_exchange_0_EUR_with_most_currencies() {
+        String result = CurrenciesExchangeUtils.exchangeMoneyWithMostCurrencies(0, Currency.EUR);
+        Assert.assertEquals("", result);
+    }
 }
