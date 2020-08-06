@@ -32,18 +32,29 @@ public class ExchangeSolution {
                 .collect(Collectors.joining(" + "));
     }
 
+    private void updateDetail(HashMap<Currency, Integer> prevDetails, Currency optimizedCurrency) {
+        this.getDetails().putAll(prevDetails);
+        this.getDetails().computeIfPresent(optimizedCurrency, (key, value) -> ++value);
+        this.getDetails().putIfAbsent(optimizedCurrency, 1);
+    }
+
     public static ExchangeSolution exchange(int num, Currency unit) {
         final List<ExchangeSolution> exchangeSolutions = IntStream.rangeClosed(0, num * unit.value).mapToObj(amount -> new ExchangeSolution(amount, new HashMap<>()))
                 .collect(Collectors.toList());
-        exchangeSolutions.stream()
-                .filter(exchangeSolution -> exchangeSolution.total > 0)
-                .forEach(exchangeSolution -> {
-                    Currency optimizedCurrency = getOptimizedCurrency(exchangeSolutions,exchangeSolution.total);
-                    exchangeSolution.getDetails().putAll(exchangeSolutions.get(exchangeSolution.total - optimizedCurrency.value).details);
-                    exchangeSolution.getDetails().computeIfPresent(optimizedCurrency, (key, value) -> ++value);
-                    exchangeSolution.getDetails().putIfAbsent(optimizedCurrency, 1);
-                });
+        for (ExchangeSolution exchangeSolution : exchangeSolutions) {
+            if (exchangeSolution.total > 0) {
+                Currency optimizedCurrency = getOptimizedCurrency(exchangeSolutions, exchangeSolution.total);
+                exchangeSolution.updateDetail(
+                        exchangeSolutions.get(getSubExchangeSolutionIndex(optimizedCurrency, exchangeSolution.total)).details,
+                        optimizedCurrency
+                );
+            }
+        }
         return exchangeSolutions.get(num * unit.value);
+    }
+
+    private static int getSubExchangeSolutionIndex(Currency optimizedCurrency, int total) {
+        return total - optimizedCurrency.value;
     }
 
     private static Currency getOptimizedCurrency(List<ExchangeSolution> exchangeSolutions, int total) {
@@ -55,6 +66,6 @@ public class ExchangeSolution {
     }
 
     private static int predictCurrenciesCount(List<ExchangeSolution> exchangeSolutions, int total, Currency currency) {
-        return exchangeSolutions.get(total - currency.value).currenciesCount();
+        return exchangeSolutions.get(getSubExchangeSolutionIndex(currency, total)).currenciesCount();
     }
 }
