@@ -4,14 +4,14 @@ import java.util.HashMap;
 
 public class ExchangeSolution {
     int total;
-    HashMap<String, Integer> details;
+    HashMap<Currency, Integer> details;
 
-    public ExchangeSolution(int total, HashMap<String, Integer> details) {
+    public ExchangeSolution(int total, HashMap<Currency, Integer> details) {
         this.total = total;
         this.details = details;
     }
 
-    public HashMap<String, Integer> getDetails() {
+    public HashMap<Currency, Integer> getDetails() {
         return details;
     }
 
