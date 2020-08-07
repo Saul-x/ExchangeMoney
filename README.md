@@ -6,7 +6,11 @@
 货币币值：k1,k2...kn
 对于找零函数F和总值total，F(total)总是能得到满足于总值total的最少的货币张数
 那么可以推论：
+
+
 F(total) = min{F(total-k1),F(total-k2)....F(total-kn)) + 1; (这里total - kn必须大于0，否则不纳入min计算)
+
+
 F(0) = 0;
 
 这样，我们可以有一张total大小的表，依次计算并记录F(0)....F(total-1)的解，这样重复的子问题不需要再次计算，只需要查表中结果就好了，从而可以得到F(total)的解
