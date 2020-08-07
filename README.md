@@ -24,3 +24,6 @@ CurrenciesExchangeUtils中
 CurrenciesExchangeUtils.exchangeMoneyWithLeastCurrencies
 CurrenciesExchangeUtils.exchangeMoneyWithMostCurrencies
 分别是两问的接口函数。
+
+tip:
+本实例中的动态规划子问题结果集都是保存在java内存中的，数据量比较大时容易爆内存，而且每次执行exchange重新计算也并不是一个好方式，容易频繁触发gc，真正的业务场景中这个子问题结果集存放可能有很多的不同的方式（依据具体的业务而定）。
