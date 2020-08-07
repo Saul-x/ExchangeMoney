@@ -41,6 +41,7 @@ public class ExchangeSolution {
     }
 
     public static ExchangeSolution exchange(int num, Currency unit) {
+        if (num < 0) throw new AssertionError("Currency quantity should be positive");
         final List<ExchangeSolution> exchangeSolutions = IntStream.rangeClosed(0, num * unit.value).mapToObj(amount -> new ExchangeSolution(amount, new HashMap<>()))
                 .collect(Collectors.toList());
         exchangeSolutions.stream().filter(exchangeSolution -> exchangeSolution.total > 0).forEach(exchangeSolution -> {

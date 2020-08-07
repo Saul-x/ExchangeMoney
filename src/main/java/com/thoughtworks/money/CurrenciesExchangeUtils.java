@@ -11,6 +11,7 @@ public class CurrenciesExchangeUtils {
     }
 
     public static String exchangeMoneyWithMostCurrencies(int num, Currency unit) {
+        if (num < 0) throw new AssertionError("Currency quantity should be positive");
         if (num == 0) return "";
         return Stream.of(Currency.values())
                 .min(Comparator.comparing(currency -> currency.value))

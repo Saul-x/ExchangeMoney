@@ -52,4 +52,9 @@ public class ExchangeSolutionTest {
         assertTrue(detail.isEmpty());
         assertEquals(0, exchangeSolution.currenciesCount());
     }
+
+    @Test(expected = AssertionError.class)
+    public void should_throw_error_negative_currency_with_least_currencies() {
+        ExchangeSolution.exchange(-1, Currency.EUR);
+    }
 }

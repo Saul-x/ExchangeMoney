@@ -51,4 +51,14 @@ public class CurrenciesExchangeUtilsTest {
         String result = CurrenciesExchangeUtils.exchangeMoneyWithMostCurrencies(0, Currency.EUR);
         Assert.assertEquals("", result);
     }
+
+    @Test(expected = AssertionError.class)
+    public void should_throw_error_negative_currency_with_most_currencies() {
+        CurrenciesExchangeUtils.exchangeMoneyWithMostCurrencies(-1, Currency.EUR);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void should_throw_error_negative_currency_with_least_currencies() {
+        CurrenciesExchangeUtils.exchangeMoneyWithLeastCurrencies(-1, Currency.EUR);
+    }
 }
